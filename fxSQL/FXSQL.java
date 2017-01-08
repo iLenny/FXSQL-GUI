@@ -3,6 +3,7 @@ package fxSQL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import fxSQL.tools.FadeObject;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 /**
@@ -29,6 +31,7 @@ public class FXSQL extends Application {
 	
 	// Panes:
 	private LoginPane loginPane;
+	private TableListPane tableListPane;
 	
 	// Scenes:
 	private Scene loginScene;
@@ -44,6 +47,11 @@ public class FXSQL extends Application {
 		loginPane.setId("loginPane");
 		loginPane.relocate(45, 150);
 		
+		// Create TableListPane
+		tableListPane = new TableListPane();
+		tableListPane.setId("tableListPane");
+		tableListPane.relocate(65, 35);
+		tableListPane.setOpacity(0);
 		
 		
 		loginPane.getLoginButton().setOnMouseClicked(e-> {
@@ -55,22 +63,33 @@ public class FXSQL extends Application {
 			String database = loginPane.getDatabase();
 			final String DB_URL = "jdbc:mysql://"+ip+"/"+database + "?useSSL=true";
 			
+			
 			try {
 				Connection conn = DriverManager.getConnection(DB_URL,user, password);
 				loginPane.setLoginMessage("Connected!");
 				loginPane.getLoginMessage().setTextFill(Color.CHARTREUSE);
+				tableListPane.buildList(conn);
+				FadeObject.fadeIn(loginPane, Duration.millis(20), ()->{
+					FadeObject.fadeOut(loginPane, Duration.millis(800), ()->{
+						FadeObject.fadeIn(tableListPane, Duration.millis(800));
+					});
+				});
+				
+			
 			} catch(Exception ex) {
 				loginPane.setLoginMessage("Connection Failed!");
 				loginPane.getLoginMessage().setTextFill(Color.FIREBRICK);
+				FadeObject.fadeIn(loginPane, Duration.millis(20));
 			}
 		});	
 		
-		Pane root = new Pane(supportMessage,loginPane);
+		Pane root = new Pane(supportMessage,loginPane, tableListPane);
 		root.setId("root");
 		loginScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		loginScene.getStylesheets().add(STYLESHEET);
 		primaryStage.setTitle("FXSQL GUI");
 		primaryStage.setScene(loginScene);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 	
