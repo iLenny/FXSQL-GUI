@@ -11,8 +11,10 @@
   <section>
     <h2>Downloads</h2>
     <ul>
-      <li><a href ="https://github.com/iLenny/Shooting-Math/blob/master/game/download/ShootingMath.jar?raw=true" download="ShootingMath">fxSQL.JAR file</a> <b>(Last Updated: Jan 8, 2017 8:13 PM)</b></li>
-      <li><a href ="https://github.com/iLenny/Shooting-Math/blob/master/game/download/ShootingMath.exe?raw=true" download="ShootingMath">fxSQL.EXE file</a> <b>(Last Updated: Jan 8, 2017 8:14 PM)</b></li>
+      <li><a href ="
+https://github.com/iLenny/FXSQL-GUI/blob/master/fxSQL/downloads/FXSQL.jar?raw=true" download="ShootingMath">fxSQL.JAR file</a> <b>(Last Updated: Jan 8, 2017 8:13 PM)</b></li>
+      <li><a href ="
+https://github.com/iLenny/FXSQL-GUI/blob/master/fxSQL/downloads/FXSQL.exe?raw=true" download="ShootingMath">fxSQL.EXE file</a> <b>(Last Updated: Jan 8, 2017 8:14 PM)</b></li>
     </ul>
   </section>
   
@@ -21,3 +23,4 @@
     <p> Software Developer -<a href="https://www.linkedin.com/in/leibniz-berihuete-60817899">Leibniz H. Berihuete</a></p>
   </footer>
 </article>
+
