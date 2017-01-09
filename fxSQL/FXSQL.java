@@ -2,6 +2,7 @@ package fxSQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import fxSQL.tools.FadeObject;
 import javafx.application.Application;
@@ -22,8 +23,8 @@ import javafx.util.Duration;
  */
 public class FXSQL extends Application {
 	private static final String STYLESHEET = FXSQL.class.getResource("css/style.css").toString();
-	private static final int WINDOW_WIDTH = 400;
-	private static final int WINDOW_HEIGHT = 600;
+	public static final int WINDOW_WIDTH = 400;
+	public static final int WINDOW_HEIGHT = 600;
 	ObservableList<String> seasonList = FXCollections.<String>observableArrayList();
 	ListView<String> season = new ListView<>(seasonList);
 	
@@ -32,6 +33,7 @@ public class FXSQL extends Application {
 	// Panes:
 	private LoginPane loginPane;
 	private TableListPane tableListPane;
+	private TablePane tablePane;
 	
 	// Scenes:
 	private Scene loginScene;
@@ -43,7 +45,7 @@ public class FXSQL extends Application {
 		supportMessage.relocate(WINDOW_WIDTH*0.325, WINDOW_HEIGHT*0.9);
 		supportMessage.setId("supportMessage");
 		// Create loginPane
-		loginPane = new LoginPane();
+		loginPane = LoginPane.getInstance();
 		loginPane.setId("loginPane");
 		loginPane.relocate(45, 150);
 		
@@ -52,6 +54,12 @@ public class FXSQL extends Application {
 		tableListPane.setId("tableListPane");
 		tableListPane.relocate(65, 35);
 		tableListPane.setOpacity(0);
+		
+		// Creating TablePane
+		tablePane = new TablePane();
+		tablePane.setId("tablePane");
+		tablePane.setOpacity(0);
+		tablePane.relocate(65,35);
 		
 		
 		loginPane.getLoginButton().setOnMouseClicked(e-> {
@@ -83,7 +91,29 @@ public class FXSQL extends Application {
 			}
 		});	
 		
-		Pane root = new Pane(supportMessage,loginPane, tableListPane);
+		tableListPane.getOpenTableButton().setOnMouseClicked(e-> {
+			// Check Authentication
+			String user = loginPane.getUser();
+			String password = loginPane.getPassword();
+			String ip = loginPane.getIP();
+			String database = loginPane.getDatabase();
+			final String DB_URL = "jdbc:mysql://"+ip+"/"+database + "?useSSL=true";			
+			try {
+				Connection conn = DriverManager.getConnection(DB_URL, user, password);
+				String selectedTable = tableListPane.getSelectedItem();
+				tablePane.buildTable(conn, selectedTable);
+				FadeObject.fadeOut(tableListPane, Duration.millis(800), ()->{
+					FadeObject.fadeIn(tablePane, Duration.millis(800));
+				});
+				
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			
+		});
+		
+		Pane root = new Pane(supportMessage,loginPane, tableListPane, tablePane);
 		root.setId("root");
 		loginScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		loginScene.getStylesheets().add(STYLESHEET);

@@ -18,6 +18,8 @@ import javafx.util.Duration;
  *
  */
 public class LoginPane extends Pane {
+	
+	private static LoginPane loginPane;
 	// Default text values
 	private static final String TITLE_TEXT = "FXSQL GUI";
 	private static final String USER_TEXT =     "Username:  ";
@@ -50,7 +52,7 @@ public class LoginPane extends Pane {
 	private Button loginButton;
 	
 	/* *** CONSTRUCTOR *** */
-	public LoginPane() {
+	private LoginPane() {
 		// Initialize:
 		createTitle();
 		createUserBox();
@@ -98,6 +100,16 @@ public class LoginPane extends Pane {
 		});
 		
 		
+	}
+	
+	public static LoginPane getInstance() {
+		if(loginPane !=null) {
+			return loginPane;
+		}
+		else {
+			loginPane = new LoginPane();
+			return loginPane;
+		}
 	}
 	
 	
